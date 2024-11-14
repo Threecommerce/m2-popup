@@ -1,0 +1,28 @@
+<div class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <div class="close">X</div>
+        <?php foreach ($block->getFilteredPopups() as $popup): ?>
+            <div class="popup-item">
+                <p><?= $popup->getContenuto(); ?></p>
+                <style><?= $popup->getCss(); ?></style>
+            </div>
+            <script type="text/javascript">
+                require(['jquery', 'jquery/jquery.cookie'], function ($) {
+                    $(document).ready(function () {
+                        var timing = <?= $popup->getTiming(); ?>;
+                        var popupName = '<?= $popup->getName(); ?>';
+                        if (!$.cookie(popupName)) {
+                            setTimeout(function () {
+                                $('.popup-overlay').show();
+                            }, timing);
+                        }
+                        $('.popup-content .close').on('click', function () {
+                            $('.popup-overlay').hide();
+                            $.cookie(popupName, 'closed', { expires: 1, path: '/' });
+                        });
+                    });
+                });
+            </script>
+        <?php endforeach; ?>
+    </div>
+</div>
